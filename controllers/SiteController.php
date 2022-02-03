@@ -8,6 +8,7 @@ use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
+use app\models\RegistrationForm;
 use app\models\ContactForm;
 
 class SiteController extends Controller
@@ -96,6 +97,24 @@ class SiteController extends Controller
         Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+
+    public function actionRegistration()
+    {
+        if (!Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+        
+        $model = new RegistrationForm();
+
+        if ($model->load(Yii::$app->request->post()) && $model->register()) 
+        {
+            $this->goHome();
+        }
+
+        return $this->render('registration', [
+            'model' => $model,
+        ]);
     }
 
     /**
