@@ -12,6 +12,8 @@ use Yii;
  * @property string $name
  * @property string $email
  * @property string $result
+ *
+ * @property Test $test
  */
 class TestResult extends \yii\db\ActiveRecord
 {
@@ -33,6 +35,7 @@ class TestResult extends \yii\db\ActiveRecord
             [['test_id'], 'integer'],
             [['result'], 'string'],
             [['name', 'email'], 'string', 'max' => 255],
+            [['test_id'], 'exist', 'skipOnError' => true, 'targetClass' => Test::className(), 'targetAttribute' => ['test_id' => 'id']],
         ];
     }
 
@@ -48,5 +51,15 @@ class TestResult extends \yii\db\ActiveRecord
             'email' => 'Email',
             'result' => 'Result',
         ];
+    }
+
+    /**
+     * Gets query for [[Test]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTest()
+    {
+        return $this->hasOne(Test::className(), ['id' => 'test_id']);
     }
 }

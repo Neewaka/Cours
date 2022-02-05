@@ -14,7 +14,10 @@ use yii\web\IdentityInterface;
  * @property string $email
  * @property int $role_id
  * @property string $auth_key
- * @property string $access_token
+ * @property string|null $access_token
+ *
+ * @property Role $role
+ * @property Test[] $tests
  */
 class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
@@ -35,6 +38,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['login', 'password', 'email', 'role_id', 'auth_key'], 'required'],
             [['role_id'], 'integer'],
             [['login', 'password', 'email', 'auth_key', 'access_token'], 'string', 'max' => 255],
+            [['role_id'], 'exist', 'skipOnError' => true, 'targetClass' => Role::className(), 'targetAttribute' => ['role_id' => 'id']],
         ];
     }
 
@@ -52,6 +56,26 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'auth_key' => 'Auth Key',
             'access_token' => 'Access Token',
         ];
+    }
+
+    /**
+     * Gets query for [[Role]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRole()
+    {
+        return $this->hasOne(Role::className(), ['id' => 'role_id']);
+    }
+
+    /**
+     * Gets query for [[Tests]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTests()
+    {
+        return $this->hasMany(Test::className(), ['created_by' => 'id']);
     }
 
     public static function findIdentity($id)
@@ -91,5 +115,4 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return Yii::$app->getSecurity()->validatePassword($password, $this->password);
     }
-
 }

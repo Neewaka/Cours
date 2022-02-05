@@ -9,11 +9,16 @@ use Yii;
  *
  * @property int $id
  * @property string $title
- * @property string $subject
+ * @property string|null $subject
  * @property int $created_by
  * @property string $created_at
- * @property string $test_body
+ * @property string|null $test_body
  * @property string $hash_link
+ * @property string $password
+ * @property int $is_published
+ *
+ * @property User $createdBy
+ * @property TestResult[] $testResults
  */
 class Test extends \yii\db\ActiveRecord
 {
@@ -31,11 +36,12 @@ class Test extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'subject', 'created_by', 'test_body', 'hash_link'], 'required'],
-            [['created_by'], 'integer'],
+            [['title', 'created_by', 'hash_link', 'password', 'is_published'], 'required'],
+            [['created_by', 'is_published'], 'integer'],
             [['created_at'], 'safe'],
             [['test_body'], 'string'],
-            [['title', 'subject', 'hash_link'], 'string', 'max' => 255],
+            [['title', 'subject', 'hash_link', 'password'], 'string', 'max' => 255],
+            [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
         ];
     }
 
@@ -52,6 +58,28 @@ class Test extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'test_body' => 'Test Body',
             'hash_link' => 'Hash Link',
+            'password' => 'Password',
+            'is_published' => 'Is Published',
         ];
+    }
+
+    /**
+     * Gets query for [[CreatedBy]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreatedBy()
+    {
+        return $this->hasOne(User::className(), ['id' => 'created_by']);
+    }
+
+    /**
+     * Gets query for [[TestResults]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTestResults()
+    {
+        return $this->hasMany(TestResult::className(), ['test_id' => 'id']);
     }
 }
