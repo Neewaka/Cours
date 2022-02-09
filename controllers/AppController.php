@@ -8,7 +8,7 @@ use Yii;
 class AppController extends \yii\web\Controller
 {
 
-    public $hash_link;
+    public $testInfo;
 
     public function beforeAction($action)
     {

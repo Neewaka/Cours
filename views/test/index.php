@@ -8,6 +8,7 @@ use yii\grid\GridView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Tests';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="test-index">
 
@@ -21,11 +22,17 @@ $this->title = 'Tests';
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'test_id',
-            'name',
-            'email:email',
-            'result:ntext',
+            // 'id',
+            ['attribute' => 'title', 'format' => 'raw', 'value' => function($data){
+                return '<a href="' . 'test/' . $data->hash_link . '">' . $data->title . '</a>';
+            }],
+            'subject',
+            // 'created_by',
+            'created_at',
+            //'test_body:ntext',
+            'hash_link',
+            //'password',
+            //'is_published',
 
             
         ],

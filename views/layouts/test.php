@@ -28,36 +28,42 @@ AppAsset::register($this);
     <?php $this->beginBody() ?>
 
     <header>
-        <?php
-        NavBar::begin([
-            'brandLabel' => Yii::$app->name,
-            'brandUrl' => Yii::$app->homeUrl,
-            'options' => [
-                'class' => 'navbar navbar-expand-md navbar-dark bg-dark fixed-top',
-            ],
-        ]);
-        echo Nav::widget([
-            'options' => ['class' => 'navbar-nav'],
-            'items' => [
-                ['label' => 'Home', 'url' => ['/site/index']],
-                ['label' => 'About', 'url' => ['/site/about']],
-                ['label' => 'Contact', 'url' => ['/site/contact']],
-                ['label' => 'Registration', 'url' => ['/site/registration']],
-                Yii::$app->user->isGuest ? (['label' => 'Login', 'url' => ['/site/login']]
-                ) : ('<li>'
-                    . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
-                    . Html::submitButton(
-                        'Logout (' . Yii::$app->user->identity->login . ')',
-                        ['class' => 'btn btn-link logout']
-                    )
-                    . Html::endForm()
-                    . '</li>'
+    <?php
+    NavBar::begin([
+        'brandLabel' => Yii::$app->name,
+        'brandUrl' => Yii::$app->homeUrl,
+        'options' => [
+            'class' => 'navbar navbar-expand-md navbar-dark bg-dark fixed-top',
+        ],
+    ]);
+    echo Nav::widget([
+        'options' => ['class' => 'navbar-nav'],
+        'items' => [
+            ['label' => 'Home', 'url' => ['/site/index']],
+            ['label' => 'About', 'url' => ['/site/about']],
+            ['label' => 'Contact', 'url' => ['/site/contact']],
+            Yii::$app->user->isGuest ? (
+                ['label' => 'Registration', 'url' => ['/site/registration']]
+            ) : (
+                ['label' => 'My tests', 'url' => ['/test/']]
+            ),
+            Yii::$app->user->isGuest ? (
+                ['label' => 'Login', 'url' => ['/site/login']]
+            ) : (
+                '<li>'
+                . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
+                . Html::submitButton(
+                    'Logout (' . Yii::$app->user->identity->login . ')',
+                    ['class' => 'btn btn-link logout']
                 )
-            ],
-        ]);
-        NavBar::end();
-        ?>
-    </header>
+                . Html::endForm()
+                . '</li>'
+            )
+        ],
+    ]);
+    NavBar::end();
+    ?>
+</header>
 
     <main role="main" class="flex-shrink-0">
         <div class="container">
@@ -66,7 +72,7 @@ AppAsset::register($this);
             ]) ?>
             <?= Alert::widget() ?>
 
-            <h1>Test configurations for <?= $model->title ?></h1>
+            <h1>Test configurations for <?= $this->context->testInfo->title ?></h1>
 
                 <hr>
                 
@@ -79,7 +85,7 @@ AppAsset::register($this);
                         <a href="results" type="button" class="btn btn-secondary">Results</a>
                     </div>
                 </div>
-                <div class="col-9">
+                <div id='page-content' class="col-9">
                     <?= $content ?>
                 </div>
             </div>

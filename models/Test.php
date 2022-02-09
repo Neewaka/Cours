@@ -82,4 +82,9 @@ class Test extends \yii\db\ActiveRecord
     {
         return $this->hasMany(TestResult::className(), ['test_id' => 'id']);
     }
+
+    public static function getTestByHash($hash_link)
+    {
+        return self::find()->where(['hash_link' => $hash_link])->one();
+    }
 }

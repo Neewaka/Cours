@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 
-class TestBase extends Model
+class TestBaseForm extends Model
 {
     public $name;
     public $password;
