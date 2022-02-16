@@ -48,9 +48,10 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'test/<hash_link>' =>'test/view',
+                'test/<hash_link>/<action>' => 'test/<action>',
+                '<controller>/<view>' =>'<controller>/<view>',
                 '<controller>/create' =>'<controller>/create',
-                '<controller>/<hash_link>' =>'<controller>/view',
-                '<controller>/<hash_link>/<action>' => '<controller>/<action>',
                 // '<controller>/<id:\d+>/view' => '<controller>/view',
             ],
         ],

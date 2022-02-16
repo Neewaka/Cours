@@ -8,12 +8,13 @@ use yii\base\Model;
 class QuestionForm extends Model
 {
     public $question;
+    public $choices;
     public $answer;
 
     public function rules()
     {
         return [
-            [['question', 'answer'], 'required'],
+            [['answer'], 'required'],
         ];
     }
 
@@ -22,6 +23,7 @@ class QuestionForm extends Model
         return [
             'question' => 'question',
             'answer' => 'answer',
+            'choices' => 'choices',
         ];
     }
     

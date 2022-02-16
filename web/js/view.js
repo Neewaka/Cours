@@ -1,17 +1,17 @@
 $('.field-testform-password').css('display', 'none');
 
 $('#role-admin').on('click', function(){
+    $("#test-form").get(0).reset();
     $(this).addClass('active');
     $('#role-student').removeClass('active');
-    console.log('admin');
     $('.field-testform-name').css('display', 'none');
     $('.field-testform-password').css('display', 'block');
 })
 
 $('#role-student').on('click', function(){
+    $("#test-form").get(0).reset();
     $(this).addClass('active');
     $('#role-admin').removeClass('active');
-    console.log('student');
     $('.field-testform-password').css('display', 'none');
     $('.field-testform-name').css('display', 'block');
 })
