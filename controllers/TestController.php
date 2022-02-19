@@ -7,6 +7,7 @@ use app\models\TestBaseForm;
 use app\models\TestForm;
 use app\models\TestSearch;
 use app\models\TestResultSearch;
+use app\models\TestResult;
 use app\models\QuestionForm;
 use yii\filters\AccessControl;
 use Yii;
@@ -29,8 +30,7 @@ class TestController extends AppController
                             $cookies = Yii::$app->request->cookies;
                             $test = $cookies->getValue('test');
                             $hash_link = explode('/', Yii::$app->request->url)[2];
-                            if($test == $hash_link)
-                            {
+                            if ($test == $hash_link) {
                                 return true;
                             }
                             return false;
@@ -60,6 +60,13 @@ class TestController extends AppController
 
             \Yii::$app->session['testBase'] = $testBase;
             if ($test = $testBase->createTest()) {
+
+                $cookies = Yii::$app->response->cookies;
+                $cookies->add(new \yii\web\Cookie([
+                    'name' => 'test',
+                    'value' => $test->hash_link,
+                ]));
+
                 return $this->redirect(['settings', 'hash_link' => $test->hash_link]);
             }
         }
@@ -74,6 +81,11 @@ class TestController extends AppController
         $this->layout = 'test';
         $model = $this->findModel($hash_link);
         $this->testInfo = $model;
+
+        if ($model->load($this->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', 'Data updated successfully');
+            return $this->refresh();
+        }
 
         return $this->render('settings', [
             'model' => $model,
@@ -98,7 +110,8 @@ class TestController extends AppController
             if ($post['QuestionForm']) {
                 $model->test_body = json_encode($post['QuestionForm']);
                 $model->save();
-                $this->refresh();
+                Yii::$app->session->setFlash('success', 'Data updated successfully');
+                return $this->refresh();
             }
         }
 
@@ -112,6 +125,16 @@ class TestController extends AppController
         $this->layout = 'test';
         $model = $this->findModel($hash_link);
         $this->testInfo = $model;
+
+        if ($this->request->post()) {
+            $model->is_published = 1;
+            if ($model->save()) {
+
+                $this->refresh();
+            } else {
+                $this->goHome();
+            }
+        }
 
         return $this->render('publish', [
             'model' => $model,
@@ -149,27 +172,62 @@ class TestController extends AppController
                     'name' => 'test',
                     'value' => $hash_link,
                 ]));
-
                 return $this->redirect(['settings', 'hash_link' => $test->hash_link]);
-            } else if ($model->validateAdminPassword()) {
-                return $this->redirect(['student', 'hash_link' => $test->hash_link]);
+            } else {
+                return $this->redirect([
+                    'student', 'hash_link' => $test->hash_link,
+                    'name' => Yii::$app->request->post()['TestForm']['name']
+                ]);
             }
         }
 
         return $this->render('view', [
             'model' => $model,
+            'test' => $test,
         ]);
     }
 
-    public function actionStudent($hash_link)
+    public function actionStudent($hash_link, $name)
     {
-        $model = $this->findModel($hash_link);
-        $this->testInfo = $model;
+        $test = $this->findModel($hash_link);
+        $this->testInfo = $test;
 
-        $items = $this->unpackTest($model->test_body);
+        $items = $this->unpackTest($test->test_body);
+
+        if ($form = $this->request->post()['QuestionForm']) {
+
+            $result = [];
+            $studentAnswers = [];
+
+            foreach ($form as $key => $item) {
+                $result[$key] = $items[$key]->answer == $item['answer'] ? true : false;
+                $studentAnswers[] = $item['answer'];
+            }
+
+            $testResult = new TestResult;
+            $testResult->test_id = $test->id;
+            $testResult->name = $name;
+            $testResult->result = json_encode($result);
+
+            if ($testResult->save()) {
+                return $this->render('student_result', [
+                    'items' => $items,
+                    'test' => $test,
+                    'studentName' => $name,
+                    'testResult' => $testResult,
+                    'studentAnswers' => $studentAnswers,
+                ]);
+            } else {
+                var_dump($testResult->errors);
+                die;
+            }
+        }
+
 
         return $this->render('student', [
             'items' => $items,
+            'test' => $test,
+            'studentName' => $name,
         ]);
     }
 
@@ -207,14 +265,3 @@ class TestController extends AppController
         return $result;
     }
 }
-
-
-
-
-
-
-
-
-
-
-// {"0":{"question":"Question55555","answer":"Chhhhhh1"},"choices":"Chhhhhh1,choice 2,choice 3,choice 4","2":{"answer":"wwwwwww"}}

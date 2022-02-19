@@ -9,6 +9,12 @@ use yii\widgets\ActiveForm;
 <h1><?= $test->title ?></h1>
 <p>Student: <?= $studentName ?></p>
 
+<? $true = substr_count($testResult->result, 'true');
+$count = explode(',', $testResult->result);
+$studentResults = $true . '/' . count($count); ?>
+
+<?= Html::tag('h1', 'Your score: ' . $studentResults, ['class' => 'text-center']) ?>
+
 <?php $form = ActiveForm::begin(['id' => 'questions-form']); ?>
 <div class="questions">
     <? foreach ($items as $key => $item) : ?>
@@ -25,9 +31,14 @@ use yii\widgets\ActiveForm;
                         <?=
                         $form->field($item, "[$key]answer")->radioList(
                             $item->choices,
-                            ['class' => 'compactRadioGroup', 'item' => function ($index, $label, $name, $checked, $value) use ($item) {
-                                return '<div class="label-q" style="display: flex">' .
-                                    Html::radio($name, $checked, ['value'  => $value, 'style' => 'margin-top: 5px']) .
+                            ['class' => 'compactRadioGroup', 'item' => function ($index, $label, $name, $checked, $value) use ($item, $studentAnswers, $key) {
+                                if ($item->answer == $label) {
+                                    $style = 'style="background-color: green"';
+                                } else if ($label == $studentAnswers[$key]) {
+                                    $style = 'style="background-color: red"';
+                                }
+
+                                return '<div class="label-q" ' . $style . '">' .
                                     Html::tag('p', $label, ['class' => 'question-label ml-2 mb-0']) . '</div>';
                             }]
                         )->label(false) ?>
@@ -39,10 +50,10 @@ use yii\widgets\ActiveForm;
     <? endforeach; ?>
 </div>
 
-<hr class="m-3">
+<!-- <hr class="m-3"> -->
 
 <div class="form-group row justify-content-md-center">
-    <?= Html::submitButton('Submit', ['class' => 'btn btn-primary m-3 col-4']) ?>
+    <?= Html::a('Logout', '/',  ['class' => 'btn btn-primary m-3 col-4']) ?>
 </div>
 
 <?php ActiveForm::end(); ?>

@@ -6,6 +6,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 ?>
 
+<h2 class="page-name">Questions</h2>
 <?php $form = ActiveForm::begin(['id' => 'questions-form']); ?>
 <div class="questions">
     <? foreach ($items as $key => $item) : ?>
@@ -51,3 +52,4 @@ use yii\widgets\ActiveForm;
 <?php ActiveForm::end(); ?>
 
 <? $this->registerJsFile(Yii::getAlias('@web') . '/js/questions.js', ['depends' => [\yii\web\YiiAsset::class], 'position' => static::POS_END]) ?>
+<? $this->registerJsFile(Yii::getAlias('@web') . '/js/menu.js', ['depends' => [\yii\web\YiiAsset::class], 'position' => static::POS_END]) ?>

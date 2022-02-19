@@ -81,7 +81,9 @@ function addQuestion() {
 
     questionHeight = questionClone.height();
     questionClone.height( 0 );
-    questionClone.animate({height: questionHeight});
+    questionClone.animate({height: questionHeight}, function(){
+        questionClone.attr('style', false);
+    });
 
     reIndex();
 }

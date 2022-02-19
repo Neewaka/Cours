@@ -13,20 +13,30 @@ use yii\widgets\ActiveForm;
     <li class="list-group-item"><button id='role-admin' class="btn btn-secondary btn-lg ">Administration</button></li>
 </ul>
 
-<div class="jumbotron">
+<div class="jumbotron view-jumbotron">
 
     <h1 class="display-4">Test <?= $this->context->testInfo->title ?></h1>
-    <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+
+    <? if($test->subject):?>
+        <p><?= $test->subject ?></p>
+    <? else: ?>
+        <p class="lead">This test has no subject</p>
+    <? endif;?>
+    
     <hr class="my-4">
-    <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+    
     <?php $form = ActiveForm::begin(['id' => 'test-form']); ?>
 
-    <?= $form->field($model, 'name') ?>
+    <? if(!$test->is_published):?>
+        <p>This test is not yet published</p>
+    <? else: ?>
+        <?= $form->field($model, 'name') ?>
+    <? endif;?>
 
     <?= $form->field($model, 'password') ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Отправить', ['class' => 'btn btn-primary']) ?>
+        <?= Html::submitButton('Submit', ['class' => 'btn btn-primary view-submit']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
@@ -34,5 +44,5 @@ use yii\widgets\ActiveForm;
 
 </div>
 
-
+<? $this->registerJsVar('is_published', $test->is_published, static::POS_BEGIN); ?>
 <? $this->registerJsFile(Yii::getAlias('@web') . '/js/view.js', ['depends' => [\yii\web\YiiAsset::class], 'position' => static::POS_END]) ?>

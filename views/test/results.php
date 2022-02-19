@@ -7,11 +7,11 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\TestrSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Tests';
+$this->title = 'Results';
 ?>
 <div class="test-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h2 class="page-name"><?= Html::encode($this->title) ?></h2>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -21,15 +21,20 @@ $this->title = 'Tests';
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'test_id',
+            // 'id',
+            // 'test_id',
             'name',
             'email:email',
-            'result:ntext',
-
-            
+            'date:datetime',
+            ['attribute' => 'result', 'value' => function($data){
+                $true = substr_count($data->result, 'true');
+                $count = explode(',', $data->result);
+                return $true . '/' . count($count);
+            }],       
         ],
     ]); ?>
 
 
 </div>
+
+<? $this->registerJsFile(Yii::getAlias('@web') . '/js/menu.js', ['depends' => [\yii\web\YiiAsset::class], 'position' => static::POS_END]) ?>

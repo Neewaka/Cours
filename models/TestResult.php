@@ -10,7 +10,8 @@ use Yii;
  * @property int $id
  * @property int $test_id
  * @property string $name
- * @property string $email
+ * @property string $date
+ * @property string|null $email
  * @property string $result
  *
  * @property Test $test
@@ -31,8 +32,9 @@ class TestResult extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['test_id', 'name', 'email', 'result'], 'required'],
+            [['test_id', 'name', 'result'], 'required'],
             [['test_id'], 'integer'],
+            [['date'], 'safe'], 
             [['result'], 'string'],
             [['name', 'email'], 'string', 'max' => 255],
             [['test_id'], 'exist', 'skipOnError' => true, 'targetClass' => Test::className(), 'targetAttribute' => ['test_id' => 'id']],
@@ -48,6 +50,7 @@ class TestResult extends \yii\db\ActiveRecord
             'id' => 'ID',
             'test_id' => 'Test ID',
             'name' => 'Name',
+            'date' => 'Date', 
             'email' => 'Email',
             'result' => 'Result',
         ];

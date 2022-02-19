@@ -29,7 +29,7 @@ class TestBaseForm extends Model
     {
         $test = new Test();
         $test->title = $this->name;
-        $test->created_by = Yii::$app->user->identity->id;
+        $test->created_by = Yii::$app->user->isGuest ? null : Yii::$app->user->identity->id;
         $test->hash_link = $this->makeHash(20);
         $test->password = $this->password;
         $test->is_published = 0;

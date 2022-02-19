@@ -36,7 +36,7 @@ class Test extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'created_by', 'hash_link', 'password', 'is_published'], 'required'],
+            [['title', 'hash_link', 'password', 'is_published'], 'required'],
             [['created_by', 'is_published'], 'integer'],
             [['created_at'], 'safe'],
             [['test_body'], 'string'],
