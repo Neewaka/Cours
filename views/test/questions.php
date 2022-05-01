@@ -1,13 +1,14 @@
 <?php
 /* @var $this yii\web\View */
 
-use Codeception\PHPUnit\ResultPrinter\HTML as ResultPrinterHTML;
 use yii\helpers\Html;
+use yii\widgets\Pjax;
 use yii\widgets\ActiveForm;
+use app\components\QuestieWidget;
 ?>
 
-<h2 class="page-name">Questions</h2>
-<?php $form = ActiveForm::begin(['id' => 'questions-form']); ?>
+<h2 class="page-name">Вопросы</h2>
+<!-- <?php $form = ActiveForm::begin(['id' => 'questions-form']); ?>
 <div class="questions">
     <? foreach ($items as $key => $item) : ?>
         <div class="question-box container m-3">
@@ -31,7 +32,7 @@ use yii\widgets\ActiveForm;
                             }]
                         )->label(false) ?>
 
-                        <p class="btn form-add-choice"><u>add another choice...</u></p>
+                        <p class="btn form-add-choice"><u>добавить еще один вариант...</u></p>
                     </div>
                 </div>
                 <div class="btn btn-danger form-delete col-1" style="box-shadow: 0 0 10px 0px #bdbdbd; vertical-align: middle;">X</div>
@@ -41,15 +42,25 @@ use yii\widgets\ActiveForm;
     <? endforeach; ?>
 </div>
 
-<div class="btn btn-success btn-block m-3 form-add-question">Add question</div>
+<div class="btn btn-success btn-block m-3 form-add-question">Добавить вопрос</div>
 
 <hr class="m-3">
 
 <div class="form-group row justify-content-md-center">
-    <?= Html::submitButton('Save', ['class' => 'btn btn-primary m-3 col-4']) ?>
+    <?= Html::submitButton('Сохранить', ['class' => 'btn btn-primary m-3 col-4']) ?>
 </div>
 
-<?php ActiveForm::end(); ?>
+<?php ActiveForm::end(); ?> -->
+
+
+
+<?php Pjax::begin(['enablePushState' => false, 'timeout' => 5000, 'id' => 'block-pjax']); ?>
+<? $form = QuestieWidget::begin(['dada' => 'net']); ?>
+<?= $form->viewQuestions($items); ?>
+<? QuestieWidget::end(); ?>
+<?php Pjax::end(); ?>
+
+
 
 <? $this->registerJsFile(Yii::getAlias('@web') . '/js/questions.js', ['depends' => [\yii\web\YiiAsset::class], 'position' => static::POS_END]) ?>
 <? $this->registerJsFile(Yii::getAlias('@web') . '/js/menu.js', ['depends' => [\yii\web\YiiAsset::class], 'position' => static::POS_END]) ?>

@@ -4,13 +4,9 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 ?>
-<h1>Name your test</h1>
+<h1>Создание теста</h1>
 
-<p>
-    You may change the content of this page by modifying
-    the file <code><?= __FILE__; ?></code>.
-</p>
-
+<p>Пожалуйста заполните следующие поля для создания теста: </p>
 
 <div class="jumbotron">
 
@@ -21,7 +17,7 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'password') ?>
 
         <div class="form-group">
-            <?= Html::submitButton('Отправить', ['class' => 'btn btn-primary']) ?>
+            <?= Html::submitButton('Создать', ['class' => 'btn btn-primary']) ?>
         </div>
 
     <?php ActiveForm::end(); ?>

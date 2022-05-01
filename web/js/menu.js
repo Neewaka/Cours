@@ -10,3 +10,23 @@ function da(){
         }
     })
 }
+
+
+$('.modal-answers').on('click', function(){
+
+    $('#resultsModal').modal('show');
+    $.ajax({
+        type : "POST",
+        url : "/test/" + hash_link + "/student-result?testResult=" + $(this).data('id'),
+        data : {
+                hash_link : hash_link,
+                testResult : $(this).data('id'),
+                }
+    }).done(function(data) {
+        $('.modal-body').html(data);
+    })
+})
+
+$('#resultsModal').on('hidden.bs.modal', function(){
+    $('.modal-body').html('');
+})

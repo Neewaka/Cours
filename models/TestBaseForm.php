@@ -20,8 +20,8 @@ class TestBaseForm extends Model
     public function attributeLabels()
     {
         return [
-            'name' => 'Test name',
-            'password' => 'Password',
+            'name' => 'Название теста',
+            'password' => 'Пароль администратора',
         ];
     }
 

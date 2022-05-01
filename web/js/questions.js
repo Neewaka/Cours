@@ -49,7 +49,7 @@ function addChoice(element) {
     question = parent.find(".label-q");
     block = question.first().clone();
     block.children().attr("value", "choice");
-    block.children("p").html("choice " + ++question.length);
+    block.children("p").html("Выбор " + ++question.length);
     parent.find(".compactRadioGroup").append(block);
 }
 

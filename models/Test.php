@@ -52,10 +52,10 @@ class Test extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'title' => 'Title',
-            'subject' => 'Subject',
-            'created_by' => 'Created By',
-            'created_at' => 'Created At',
+            'title' => 'Название',
+            'subject' => 'Тема',
+            'created_by' => 'Создатель',
+            'created_at' => 'Дата создания',
             'test_body' => 'Test Body',
             'hash_link' => 'Hash Link',
             'password' => 'Password',

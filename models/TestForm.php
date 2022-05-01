@@ -9,6 +9,7 @@ class TestForm extends Model
 {
     public $name;
     public $password;
+    public $email;
     public $test;
 
     public function rules()
@@ -21,8 +22,9 @@ class TestForm extends Model
     public function attributeLabels()
     {
         return [
-            'name' => 'Name',
-            'password' => 'Password',
+            'email' => 'Email',
+            'name' => 'Имя пользователя',
+            'password' => 'Пароль',
         ];
     }
 

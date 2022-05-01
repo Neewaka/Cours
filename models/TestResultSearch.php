@@ -65,7 +65,8 @@ class TestResultSearch extends TestResult
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'result', $this->result])
-            ->andFilterWhere(['test_id' => Test::getTestByHash($params['hash_link'])]);
+            ->andFilterWhere(['test_id' => Test::getTestByHash($params['hash_link'])])
+            ->orderBy(['date' => SORT_DESC]);
 
         return $dataProvider;
     }

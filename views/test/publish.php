@@ -6,17 +6,17 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 ?>
 
-<h2 class="page-name">Publish</h2>
+<h2 class="page-name">Публикация</h2>
 
 <? if (!$model->is_published) : ?>
 
-    <p>You need to publish your test to make it available for your students to take.</p>
+    <p>Вам нужно опубликовать ваш тест, чтобы дать людям возможность для его прохождения</p>
 
     <?php $form = ActiveForm::begin(['id' => 'test-form']); ?>
 
-    <h3>Ready to publish?</h3>
+    <h3>Готовы к публикации?</h3>
     <div class="form-group text-center">
-        <?= Html::submitButton('Yes, make it public', ['class' => 'btn btn-primary view-submit btn-lg']) ?>
+        <?= Html::submitButton('Да, опубликовать мой тест', ['class' => 'btn btn-primary view-submit btn-lg']) ?>
     </div>
     <?php ActiveForm::end(); ?>
 
@@ -25,7 +25,7 @@ use yii\widgets\ActiveForm;
     <? $url = Url::to(['test/view', 'hash_link' => $model->hash_link], true) ?>
     <div class="jumbotron jumbotron-fluid text-center">
         <div class="container">
-            <h2 class="display-4">Your test is published and available at:</h1>
+            <h2 class="display-4">Ваш тест опубликован и доступен по адресу:</h1>
                 <hr>
                 <p class="lead"><?= Html::a($url, $url) ?></p>
         </div>

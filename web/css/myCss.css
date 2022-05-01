@@ -62,3 +62,8 @@
 .view-jumbotron {
     border-top-left-radius: 0;
 }
+
+.question-form {
+    box-shadow: 0 0 10px 0px #bdbdbd;
+    display:inline-block;
+}

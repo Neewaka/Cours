@@ -4,7 +4,7 @@ $("#role-student").parents('.list-group-item').addClass("active");
 $("#role-admin").on("click", function () {
     $(this).parents('.list-group-item').addClass('active');
     $(this).addClass("active");
-    shopAdmin();
+    showAdmin();
 });
 
 $("#role-student").on("click", function () {
@@ -30,13 +30,15 @@ function showStudent() {
     $("#role-admin").parents('.list-group-item').removeClass("active");
     $(".field-testform-password").css("display", "none");
     $(".field-testform-name").css("display", "block");
+    $(".field-testform-email").css("display", "block");
 }
 
-function shopAdmin() {
+function showAdmin() {
     $(".view-submit").css("display", "block");
     $("#test-form").get(0).reset();
     $("#role-student").removeClass("active");
     $("#role-student").parents('.list-group-item').removeClass("active");
     $(".field-testform-name").css("display", "none");
+    $(".field-testform-email").css("display", "none");
     $(".field-testform-password").css("display", "block");
 }

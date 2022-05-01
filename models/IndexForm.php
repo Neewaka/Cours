@@ -19,7 +19,7 @@ class IndexForm extends Model
     public function attributeLabels()
     {
         return [
-            'hash_link' => 'link',
+            'hash_link' => 'Ссылка',
         ];
     }
 

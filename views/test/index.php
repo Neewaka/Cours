@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             // 'id',
             ['attribute' => 'title', 'format' => 'raw', 'value' => function($data){
-                return '<a href="' . 'test/' . $data->hash_link . '">' . $data->title . '</a>';
+                return '<a href="' . 'test/' . $data->hash_link . '/settings' . '">' . $data->title . '</a>';
             }],
             'subject',
             // 'created_by',

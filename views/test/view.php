@@ -9,18 +9,18 @@ use yii\widgets\ActiveForm;
 ?>
 
 <ul class="list-group list-group-horizontal">
-    <li class="list-group-item"><button id='role-student' class="btn btn-secondary btn-lg active">Student</button></li>
-    <li class="list-group-item"><button id='role-admin' class="btn btn-secondary btn-lg ">Administration</button></li>
+    <li class="list-group-item"><button id='role-student' class="btn btn-secondary btn-lg active">Пользователь</button></li>
+    <li class="list-group-item"><button id='role-admin' class="btn btn-secondary btn-lg ">Администрирование</button></li>
 </ul>
 
 <div class="jumbotron view-jumbotron">
 
-    <h1 class="display-4">Test <?= $this->context->testInfo->title ?></h1>
+    <h1 class="display-4">Тест <b><?= $this->context->testInfo->title ?></b></h1>
 
     <? if($test->subject):?>
         <p><?= $test->subject ?></p>
     <? else: ?>
-        <p class="lead">This test has no subject</p>
+        <p class="lead">У данного теста еще нет темы</p>
     <? endif;?>
     
     <hr class="my-4">
@@ -28,15 +28,16 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(['id' => 'test-form']); ?>
 
     <? if(!$test->is_published):?>
-        <p>This test is not yet published</p>
+        <p>Данный тест еще не опубликован</p>
     <? else: ?>
         <?= $form->field($model, 'name') ?>
+        <?= $form->field($model, 'email')->hint('Это поле является необязательным') ?>
     <? endif;?>
 
     <?= $form->field($model, 'password') ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Submit', ['class' => 'btn btn-primary view-submit']) ?>
+        <?= Html::submitButton('Отправить', ['class' => 'btn btn-primary view-submit']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

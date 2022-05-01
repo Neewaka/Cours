@@ -49,10 +49,10 @@ class TestResult extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'test_id' => 'Test ID',
-            'name' => 'Name',
-            'date' => 'Date', 
+            'name' => 'Имя',
+            'date' => 'Дата прохождения', 
             'email' => 'Email',
-            'result' => 'Result',
+            'result' => 'Результат',
         ];
     }
 

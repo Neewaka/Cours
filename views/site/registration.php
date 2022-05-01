@@ -8,11 +8,15 @@ use yii\bootstrap4\ActiveForm;
 use yii\bootstrap4\Html;
 use yii\widgets\Pjax;
 
-$this->title = 'Registration';
+$this->title = 'Регистрация';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-contact">
+
+
+
     <h1><?= Html::encode($this->title) ?></h1>
+    <p>Пожалуйста заполните следующие поля для регистрации: </p>
 
         <div class="row">
             <div class="col-lg-5">
@@ -30,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= $form->field($model, 'password_repeat') ?>
 
                         <div class="form-group">
-                            <?= Html::submitButton('Register', ['class' => 'btn btn-primary', 'name' => 'registration-button']) ?>
+                            <?= Html::submitButton('Зарегистрироваться', ['class' => 'btn btn-primary', 'name' => 'registration-button']) ?>
                         </div>
 
                     <?php ActiveForm::end(); ?>

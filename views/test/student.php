@@ -6,8 +6,8 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 ?>
 
-<h1><?= $test->title ?></h1>
-<p>Student: <?= $studentName ?></p>
+<h1>Тест <b><?= $test->title ?></b></h1>
+<p>Пользователь: <b><?= $studentName ?></b></p>
 
 <?php $form = ActiveForm::begin(['id' => 'questions-form']); ?>
 <div class="questions">
@@ -42,7 +42,7 @@ use yii\widgets\ActiveForm;
 <hr class="m-3">
 
 <div class="form-group row justify-content-md-center">
-    <?= Html::submitButton('Submit', ['class' => 'btn btn-primary m-3 col-4']) ?>
+    <?= Html::submitButton('Отправить', ['class' => 'btn btn-primary m-3 col-4']) ?>
 </div>
 
 <?php ActiveForm::end(); ?>

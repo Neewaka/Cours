@@ -29,9 +29,15 @@ class TestController extends AppController
                         'matchCallback' => function () {
                             $cookies = Yii::$app->request->cookies;
                             $test = $cookies->getValue('test');
-                            $hash_link = explode('/', Yii::$app->request->url)[2];
-                            if ($test == $hash_link) {
+                            $url_array = explode('/', Yii::$app->request->url);
+                            $hash_link = array_search('test', $url_array);
+                            $currentTestHash = $url_array[++$hash_link];
+                            if ($test == $currentTestHash) {
                                 return true;
+                            } elseif (!Yii::$app->user->isGuest) {
+                                if (Test::getTestByHash($currentTestHash)->created_by == Yii::$app->user->id) {
+                                    return true;
+                                }
                             }
                             return false;
                         }
@@ -83,13 +89,24 @@ class TestController extends AppController
         $this->testInfo = $model;
 
         if ($model->load($this->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('success', 'Data updated successfully');
+            Yii::$app->session->setFlash('success', 'Данные обновлены');
             return $this->refresh();
         }
 
         return $this->render('settings', [
             'model' => $model,
         ]);
+    }
+
+    public function actionDelete($hash_link)
+    {
+        $test = $this->findModel($hash_link);
+        $test_name = $test->title;
+        $test->delete();
+
+        Yii::$app->session->setFlash('success', "Тест $test_name удален");
+
+        return $this->goHome();
     }
 
     public function actionQuestions($hash_link)
@@ -100,17 +117,20 @@ class TestController extends AppController
         $this->testInfo = $model;
 
         if (empty($model->test_body)) {
-            $items = [$this->createExampleTest()];
+            $example = new QuestionForm();
+            $items = [$example->createExampleTest()];
         } else {
-            $items = $this->unpackTest($model->test_body);
+            $items = QuestionForm::unpackTest($model->test_body);
         }
+
+        // var_dump($items[0]);die;
 
         if (Yii::$app->request->isPost) {
             $post = \Yii::$app->request->post();
             if ($post['QuestionForm']) {
                 $model->test_body = json_encode($post['QuestionForm']);
                 $model->save();
-                Yii::$app->session->setFlash('success', 'Data updated successfully');
+                Yii::$app->session->setFlash('success', 'Данные обновлены');
                 return $this->refresh();
             }
         }
@@ -129,10 +149,7 @@ class TestController extends AppController
         if ($this->request->post()) {
             $model->is_published = 1;
             if ($model->save()) {
-
                 $this->refresh();
-            } else {
-                $this->goHome();
             }
         }
 
@@ -149,10 +166,12 @@ class TestController extends AppController
 
         $searchModel = new TestResultSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
+        $procents = $this->calculateProcents($dataProvider);
 
         return $this->render('results', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'procents' => $procents,
         ]);
     }
 
@@ -163,7 +182,6 @@ class TestController extends AppController
         $model = new TestForm;
         $model->test = $test;
 
-        //admin entrance
         if ($model->load(\Yii::$app->request->post())) {
             if ($model->validateAdminPassword()) {
 
@@ -176,7 +194,8 @@ class TestController extends AppController
             } else {
                 return $this->redirect([
                     'student', 'hash_link' => $test->hash_link,
-                    'name' => Yii::$app->request->post()['TestForm']['name']
+                    'name' => Yii::$app->request->post()['TestForm']['name'],
+                    'email' => Yii::$app->request->post()['TestForm']['email']
                 ]);
             }
         }
@@ -187,47 +206,54 @@ class TestController extends AppController
         ]);
     }
 
-    public function actionStudent($hash_link, $name)
+    public function actionStudent($hash_link, $name, $email)
     {
         $test = $this->findModel($hash_link);
         $this->testInfo = $test;
 
-        $items = $this->unpackTest($test->test_body);
+        $items = QuestionForm::unpackTest($test->test_body);
 
         if ($form = $this->request->post()['QuestionForm']) {
 
             $result = [];
-            $studentAnswers = [];
-
             foreach ($form as $key => $item) {
-                $result[$key] = $items[$key]->answer == $item['answer'] ? true : false;
-                $studentAnswers[] = $item['answer'];
+                $result[] = ['given' => $key . $item['answer'], 'correct' => $items[$key]->answer == $item['answer'] ? 1 : 0];
             }
 
             $testResult = new TestResult;
             $testResult->test_id = $test->id;
             $testResult->name = $name;
+            $testResult->email = $email ? $email : null;
             $testResult->result = json_encode($result);
 
             if ($testResult->save()) {
-                return $this->render('student_result', [
-                    'items' => $items,
-                    'test' => $test,
-                    'studentName' => $name,
-                    'testResult' => $testResult,
-                    'studentAnswers' => $studentAnswers,
+                return $this->redirect([
+                    'student-result', 'hash_link' => $hash_link, 'testResult' => $testResult->id
                 ]);
-            } else {
-                var_dump($testResult->errors);
-                die;
             }
         }
-
 
         return $this->render('student', [
             'items' => $items,
             'test' => $test,
             'studentName' => $name,
+        ]);
+    }
+
+    public function actionStudentResult($hash_link, $testResult)
+    {
+        $test = $this->findModel($hash_link);
+        $result = $this->findResult($testResult);
+        $items = QuestionForm::unpackTest($test->test_body);
+
+        $ajax = Yii::$app->request->isAjax ? true : false;
+
+        return $this->render('student_result', [
+            'test' => $test,
+            'items' => $items,
+            'studentAnswers' => (array) json_decode($result->result),
+            'studentName' => $result->name,
+            'ajax' => $ajax,
         ]);
     }
 
@@ -241,27 +267,42 @@ class TestController extends AppController
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    protected function createExampleTest()
+    protected function findResult($id)
     {
-        $example = new QuestionForm();
-        $example->question = 'Question';
-        $example->choices = ['choice 1', 'choice 2', 'choice 3', 'choice 4'];
-        return $example;
-    }
 
-    protected function unpackTest($testBody)
-    {
-        $testArray = json_decode($testBody);
-        $result = [];
-
-        foreach ($testArray as $item) {
-            $test = new QuestionForm();
-            $test->answer = $item->answer;
-            $test->choices = explode(',', $item->choices);
-            $test->question = $item->question;
-            $result[] = $test;
+        if (($model = TestResult::find()->where(['id' => $id])->one()) !== null) {
+            return $model;
         }
 
-        return $result;
+        throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    protected function calculateProcents($dataProvider)
+    {
+        $output = array();
+        $array = array(1.0, 0.79, 0.49, 0.19);
+        $models = $dataProvider->models;
+        foreach ($models as $key => $item) {
+            $answers = array_count_values(array_column((array)json_decode($dataProvider->models[$key]->result), 'correct'));
+            $resultCoef = $answers[1] / ($answers[0] + $answers[1]);
+            $search = $resultCoef;
+            var_dump($search);
+            $procentGroup = $this->reduce($search, $array);
+            $output[$procentGroup]++;
+        }
+        // var_dump($output);die;
+        return $output;
+    }
+
+    protected function reduce($search, array $pattern)
+    {
+        $cnt = count($pattern);
+        for ($i = 0; $i < $cnt; $i++) {
+            // var_dump('i == ' . $i);
+            if (!isset($pattern[$i + 1]) || $search <= $pattern[$i] && $search > $pattern[$i + 1]) {
+                // var_dump('Вышел');
+                return $i;
+            }
+        }
     }
 }

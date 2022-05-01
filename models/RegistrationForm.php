@@ -37,7 +37,10 @@ class RegistrationForm extends Model
     public function attributeLabels()
     {
         return [
-            'password_repeat' => 'Password confirm',
+            'password_repeat' => 'Подтверждение пароля',
+            'login' => 'Логин',
+            'password' => 'Пароль',
+            'email' => 'Email',
         ];
     }
 

@@ -39,20 +39,20 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
+            ['label' => 'Главная', 'url' => ['/site/index']],
+            ['label' => 'О нас', 'url' => ['/site/about']],
             Yii::$app->user->isGuest ? (
-                ['label' => 'Registration', 'url' => ['/site/registration']]
+                ['label' => 'Регистрация', 'url' => ['/site/registration']]
             ) : (
-                ['label' => 'My tests', 'url' => ['/test/']]
+                ['label' => 'Мои тесты', 'url' => ['/test/']]
             ),
             Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
+                ['label' => 'Войти', 'url' => ['/site/login']]
             ) : (
                 '<li>'
                 . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
                 . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->login . ')',
+                    'Выйти (' . Yii::$app->user->identity->login . ')',
                     ['class' => 'btn btn-link logout']
                 )
                 . Html::endForm()
@@ -71,17 +71,17 @@ AppAsset::register($this);
             ]) ?>
             <?= Alert::widget() ?>
 
-            <h1>Test configurations for <?= $this->context->testInfo->title ?></h1>
+            <h1>Конфигурация теста <b><?= $this->context->testInfo->title ?></b></h1>
 
                 <hr>
                 
             <div class="row">
                 <div class="col-3">
                     <div class="btn-group-vertical">
-                        <a href="settings" type="button" class="btn btn-secondary">Settings</a>
-                        <a href="questions" type="button" class="btn btn-secondary">Questions</a>
-                        <a href="publish" type="button" class="btn btn-secondary">Publish</a>
-                        <a href="results" type="button" class="btn btn-secondary">Results</a>
+                        <a href="settings" type="button" class="btn btn-secondary">Настройки</a>
+                        <a href="questions" type="button" class="btn btn-secondary">Вопросы</a>
+                        <a href="publish" type="button" class="btn btn-secondary">Публикация</a>
+                        <a href="results" type="button" class="btn btn-secondary">Результаты</a>
                     </div>
                 </div>
                 <div id='page-content' class="col-9">

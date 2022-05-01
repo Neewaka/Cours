@@ -26,5 +26,31 @@ class QuestionForm extends Model
             'choices' => 'choices',
         ];
     }
+
+    public function createExampleTest()
+    {
+        $example = new QuestionForm();
+        $example->question = 'Вопрос';
+        $example->choices = ['Выбор 1', 'Выбор 2', 'Выбор 3', 'Выбор 4'];
+        return $example;
+    }
+
+    public static function unpackTest($testBody)
+    {
+        $testArray = json_decode($testBody);
+        $result = [];
+
+        // var_dump($testArray);die;
+
+        foreach ($testArray as $item) {
+            $test = new QuestionForm();
+            $test->answer = $item->answer;
+            $test->choices = explode(',', $item->choices);
+            $test->question = $item->question;
+            $result[] = $test;
+        }
+
+        return $result;
+    }
     
 }
