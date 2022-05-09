@@ -10,6 +10,7 @@ class QuestionForm extends Model
     public $question;
     public $choices;
     public $answer;
+    public $type;
 
     public function rules()
     {
@@ -27,11 +28,12 @@ class QuestionForm extends Model
         ];
     }
 
-    public function createExampleTest()
+    public static function createExampleTest()
     {
         $example = new QuestionForm();
         $example->question = 'Вопрос';
         $example->choices = ['Выбор 1', 'Выбор 2', 'Выбор 3', 'Выбор 4'];
+        $example->type = 1;
         return $example;
     }
 

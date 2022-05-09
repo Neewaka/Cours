@@ -23,8 +23,9 @@ $("body").on("click", ".form-delete", function () {
     deleteQuestion($(this));
 });
 
+
 $("body").on("click", "#cool-thing", function () {
-    console.log(questionsForm);
+    console.log(questionsForm)
     $.ajax({
         url: "/test-constructor/add-question",
         method: "post",
@@ -79,22 +80,19 @@ function reIndex() {
 }
 
 function addQuestion() {
-    var questionClone;
-
-    $.ajax({
-        url: "/test-constructor/add-question",
-        method: "post",
-        async: false,
-        success: (data) => {
-            if (data) {
-                questionClone = data;
-                $("#questions-form").html(questionClone);
-            }
-        },
+    var questionClone = $(".question-box").last().clone();
+    console.log(questionClone);
+    questionClone.find("input").each(function (index) {
+        formName = $(this).attr("name");
+        firstPar = formName.indexOf("[");
+        secondPar = formName.indexOf("]");
+        index = formName.slice(++firstPar, secondPar);
+        newIndex = formName.replace(index, $(".question-box").length);
+        $(this).attr("name", newIndex);
     });
 
     questionClone.removeClass("show");
-    $("#questions-form").append(questionClone);
+    $(".questions").append(questionClone);
 
     questionHeight = questionClone.height();
     questionClone.height(0);

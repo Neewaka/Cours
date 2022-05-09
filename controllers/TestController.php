@@ -10,6 +10,7 @@ use app\models\TestResultSearch;
 use app\models\TestResult;
 use app\models\QuestionForm;
 use yii\filters\AccessControl;
+use yii\helpers\VarDumper;
 use Yii;
 use yii\base\Model;
 use yii\web\NotFoundHttpException;
@@ -116,24 +117,44 @@ class TestController extends AppController
         $model = $this->findModel($hash_link);
         $this->testInfo = $model;
 
-        if (empty($model->test_body)) {
-            $example = new QuestionForm();
-            $items = [$example->createExampleTest()];
-        } else {
-            $items = QuestionForm::unpackTest($model->test_body);
+        $session = Yii::$app->session;
+
+        if (Yii::$app->request->isGet) {
+            $session->remove('questions');
         }
 
-        // var_dump($items[0]);die;
+        if ($session->has('questions')) {
+            $items = $session->get('questions');
+        } else {
+            if (empty($model->test_body)) {
+                $items = [QuestionForm::createExampleTest()];
+            } else {
+                $items = QuestionForm::unpackTest($model->test_body);
+            }
+            $session->set('questions', $items);
+        }
+
+
 
         if (Yii::$app->request->isPost) {
             $post = \Yii::$app->request->post();
             if ($post['QuestionForm']) {
+
                 $model->test_body = json_encode($post['QuestionForm']);
-                $model->save();
-                Yii::$app->session->setFlash('success', 'Данные обновлены');
+                // var_dump($items);die;
+                if (Model::loadMultiple($items, Yii::$app->request->post() )) {
+                    VarDumper::dump($items,10,true);
+                    die;
+                    $model->save();
+                    Yii::$app->session->setFlash('success', 'Данные обновлены');
+                } else {
+                    Yii::$app->session->setFlash('error', 'Данные не обновлены');
+                }
+
                 return $this->refresh();
             }
         }
+
 
         return $this->render('questions', [
             'items' => $items,

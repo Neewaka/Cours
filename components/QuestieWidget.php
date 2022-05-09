@@ -4,11 +4,13 @@ namespace app\components;
 
 use yii\base\Widget;
 use yii\bootstrap4\ActiveForm;
+use yii\bootstrap4\Html;
 
 class QuestieWidget extends Widget
 {
 
     public $dada = 'da';
+    public $questionsForm;
 
     public function init()
     {
@@ -20,10 +22,11 @@ class QuestieWidget extends Widget
     public function run()
     {
         $content = ob_get_clean();
+
         return $content;
     }
 
-    public function question($key, $item, $form)
+    public function question($key, $item)
     {
         // var_dump($this->class);die;
 
@@ -32,21 +35,21 @@ class QuestieWidget extends Widget
             [
                 'key' => $key,
                 'item' => $item,
-                'form' => $form,
+                'form' => $this->questionsForm,
             ]
         );
     }
 
     public function viewQuestions($items)
     {
-        $html = '';
-        $form = ActiveForm::begin(['id' => 'questions-form']);
+        $this->questionsForm = ActiveForm::begin(['id' => 'questions-form']);
+        echo Html::beginTag('div', ['class' => 'questions']);
         foreach ($items as $key => $item) {
-            $html .= $this->question($key, $item, $form);
+            echo $this->question($key, $item);
         }
+        echo Html::endTag('div');
+        echo $this->bottomForm();
         ActiveForm::end();
-
-        return $html .= $this->bottomForm();
     }
 
     public function bottomForm()
