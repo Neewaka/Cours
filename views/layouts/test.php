@@ -62,6 +62,7 @@ AppAsset::register($this);
     ]);
     NavBar::end();
     ?>
+    
 </header>
 
     <main role="main" class="flex-shrink-0">

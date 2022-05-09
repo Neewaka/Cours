@@ -11,6 +11,7 @@ use yii\bootstrap4\Html;
     <div class="row">
         <div class="col-11 question-form" style="box-shadow: 0 0 10px 0px #bdbdbd; display:inline-block">
             <?= $form->field($item, "[$key]choices")->hiddenInput(['class' => 'choices-form'])->label(false) ?>
+            <?= $form->field($item, "[$key]type")->hiddenInput()->label(false) ?>
             <?= $form->field($item, "[$key]question")->label('Вопрос ' . ($key + 1)) ?>
 
             <div class="container">

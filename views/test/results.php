@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
+use yii\bootstrap4\Modal;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\TestrSearch */
@@ -12,26 +13,26 @@ $this->title = 'Результаты';
 ?>
 <div class="test-index">
 
-<h2 class=""><?= Html::encode('Статистика процентов правильных ответов (%)') ?></h2>
+  <h2 class=""><?= Html::encode('Статистика процентов правильных ответов (%)') ?></h2>
 
-<table class="table table-bordered">
-  <thead class="thead-light">
-    <tr>
-      <th scope="col">100-80</th>
-      <th scope="col">79-50</th>
-      <th scope="col">49-20</th>
-      <th scope="col">19-0</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><?= $procents[0] ?? 0 ?></td>
-      <td><?= $procents[1] ?? 0 ?></td>
-      <td><?= $procents[2] ?? 0 ?></td>
-      <td><?= $procents[3] ?? 0 ?></td>
-    </tr>
-  </tbody>
-</table>
+  <table class="table table-bordered">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col">100-80</th>
+        <th scope="col">79-50</th>
+        <th scope="col">49-20</th>
+        <th scope="col">19-0</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><?= $procents[0] ?? 0 ?></td>
+        <td><?= $procents[1] ?? 0 ?></td>
+        <td><?= $procents[2] ?? 0 ?></td>
+        <td><?= $procents[3] ?? 0 ?></td>
+      </tr>
+    </tbody>
+  </table>
 
 
 
@@ -47,10 +48,10 @@ $this->title = 'Результаты';
       'email:email',
       'date:datetime',
       ['attribute' => 'result', 'value' => function ($data) {
-        
+
         $answers = array_count_values(array_column((array)json_decode($data->result), 'correct'));
         $true = $answers[1] ?? 0;
-        $studentResults = $true . '/' . ($answers[1] + $answers[0]). ' (' . $answers[1]/($answers[1] + $answers[0]) * 100 .'%)';
+        $studentResults = $true . '/' . ($answers[1] + $answers[0]) . ' (' . $answers[1] / ($answers[1] + $answers[0]) * 100 . '%)';
 
         return $studentResults;
       }],
@@ -71,26 +72,18 @@ $this->title = 'Результаты';
 </div>
 
 
+<?
+Modal::begin([
+  'title' => 'Результаты',
+  'id' => 'resultsModal',
+  'scrollable' => true,
+  'size' => 'modal-lg',
+  'centerVertical' => true,
+]);
 
-<div class="modal" tabindex="-1" id="resultsModal">
-  <div class="modal-dialog  modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div class="">
-          <h5 class="modal-title">Результат</h5>
-        </div>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-      </div>
-    </div>
-  </div>
-</div>
+Modal::end();
+?>
+
 
 <? $this->registerJsVar('hash_link', $this->context->testInfo->hash_link, static::POS_BEGIN); ?>
 <? $this->registerJsVar('url_path', Url::to(['/test/student-result']), static::POS_BEGIN); ?>

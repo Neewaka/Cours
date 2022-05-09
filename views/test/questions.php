@@ -9,7 +9,7 @@ use app\components\QuestieWidget;
 
 <h2 class="page-name">Вопросы</h2>
 
-<?= Html::button('do', ['id' => 'cool-thing', 'data-link' => $this->context->testInfo->hash_link]) ?>
+<?// Html::button('do', ['id' => 'cool-thing', 'data-link' => $this->context->testInfo->hash_link]) ?>
 
 
 <?= $this->render('_questions', ['items' => $items]) ?>

@@ -140,11 +140,12 @@ class TestController extends AppController
             $post = \Yii::$app->request->post();
             if ($post['QuestionForm']) {
 
-                $model->test_body = json_encode($post['QuestionForm']);
+                
                 // var_dump($items);die;
-                if (Model::loadMultiple($items, Yii::$app->request->post() )) {
-                    VarDumper::dump($items,10,true);
+                if (Model::loadMultiple($items, Yii::$app->request->post())) {
+                    VarDumper::dump($items, 10, true);
                     die;
+                    $model->test_body = json_encode($post['QuestionForm']);
                     $model->save();
                     Yii::$app->session->setFlash('success', 'Данные обновлены');
                 } else {
@@ -267,7 +268,16 @@ class TestController extends AppController
         $result = $this->findResult($testResult);
         $items = QuestionForm::unpackTest($test->test_body);
 
-        $ajax = Yii::$app->request->isAjax ? true : false;
+        if($ajax = Yii::$app->request->isAjax)
+        {
+            return $this->renderPartial('student_result', [
+                'test' => $test,
+                'items' => $items,
+                'studentAnswers' => (array) json_decode($result->result),
+                'studentName' => $result->name,
+                'ajax' => $ajax,
+            ]);    
+        }
 
         return $this->render('student_result', [
             'test' => $test,
@@ -307,11 +317,9 @@ class TestController extends AppController
             $answers = array_count_values(array_column((array)json_decode($dataProvider->models[$key]->result), 'correct'));
             $resultCoef = $answers[1] / ($answers[0] + $answers[1]);
             $search = $resultCoef;
-            var_dump($search);
             $procentGroup = $this->reduce($search, $array);
             $output[$procentGroup]++;
         }
-        // var_dump($output);die;
         return $output;
     }
 
