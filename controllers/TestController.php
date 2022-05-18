@@ -134,14 +134,9 @@ class TestController extends AppController
             $session->set('questions', $items);
         }
 
-
-
         if (Yii::$app->request->isPost) {
             $post = \Yii::$app->request->post();
             if ($post['QuestionForm']) {
-
-                
-                // var_dump($items);die;
                 if (Model::loadMultiple($items, Yii::$app->request->post())) {
                     VarDumper::dump($items, 10, true);
                     die;
@@ -155,7 +150,6 @@ class TestController extends AppController
                 return $this->refresh();
             }
         }
-
 
         return $this->render('questions', [
             'items' => $items,
@@ -268,15 +262,14 @@ class TestController extends AppController
         $result = $this->findResult($testResult);
         $items = QuestionForm::unpackTest($test->test_body);
 
-        if($ajax = Yii::$app->request->isAjax)
-        {
+        if ($ajax = Yii::$app->request->isAjax) {
             return $this->renderPartial('student_result', [
                 'test' => $test,
                 'items' => $items,
                 'studentAnswers' => (array) json_decode($result->result),
                 'studentName' => $result->name,
                 'ajax' => $ajax,
-            ]);    
+            ]);
         }
 
         return $this->render('student_result', [

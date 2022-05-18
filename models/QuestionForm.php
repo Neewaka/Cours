@@ -42,7 +42,6 @@ class QuestionForm extends Model
         $testArray = json_decode($testBody);
         $result = [];
 
-        // var_dump($testArray);die;
 
         foreach ($testArray as $item) {
             $test = new QuestionForm();

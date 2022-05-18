@@ -1,11 +1,12 @@
 <?php
 
 use yii\bootstrap4\Html;
+use yii\helpers\VarDumper;
 
 // var_dump($item);die;
 ?>
 
-
+<? //VarDumper::dump($form, 10, true) ?>
 
 <div class="question-box container m-3">
     <div class="row">

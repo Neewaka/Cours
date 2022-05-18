@@ -15,7 +15,6 @@ class QuestieWidget extends Widget
     public function init()
     {
         parent::init();
-        // var_dump($this->class);die;
         ob_start();
     }
 
@@ -26,16 +25,15 @@ class QuestieWidget extends Widget
         return $content;
     }
 
-    public function question($key, $item)
+    public function question($key, $item, $form)
     {
-        // var_dump($this->class);die;
 
         return $this->render(
             'question',
             [
                 'key' => $key,
                 'item' => $item,
-                'form' => $this->questionsForm,
+                'form' => $form,
             ]
         );
     }
@@ -45,11 +43,16 @@ class QuestieWidget extends Widget
         $this->questionsForm = ActiveForm::begin(['id' => 'questions-form']);
         echo Html::beginTag('div', ['class' => 'questions']);
         foreach ($items as $key => $item) {
-            echo $this->question($key, $item);
+            echo $this->question($key, $item, $this->questionsForm);
         }
         echo Html::endTag('div');
         echo $this->bottomForm();
         ActiveForm::end();
+    }
+
+    public function getForm()
+    {
+        return $this->questionsForm;
     }
 
     public function bottomForm()
