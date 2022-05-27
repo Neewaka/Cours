@@ -5,10 +5,10 @@ $("#questions-form").on("beforeValidate", function (event) {
         choices = [];
         $(this)
             .children()
-            .each(function () {
+            .each(function (index, value) {
                 label = $(this).children("p").html();
                 choices.push(label);
-                $(this).children("input")[0].value = label;
+                $(this).children("input")[0].value = index;
             });
         $(this)
             .parents(".question-form")
@@ -16,26 +16,10 @@ $("#questions-form").on("beforeValidate", function (event) {
             .attr("value", choices);
     });
     reIndex();
-    // return false;
 });
 
 $("body").on("click", ".form-delete", function () {
     deleteQuestion($(this));
-});
-
-$("body").on("click", "#cool-thing", function () {
-    console.log(questionsForm);
-    $.ajax({
-        url: "/test-constructor/add-question",
-        method: "post",
-        data: { hash_link: $(this).data("link") },
-        async: false,
-        success: (data) => {
-            if (data) {
-                $("#questions-form").html(data);
-            }
-        },
-    });
 });
 
 $("body").on("click", ".form-add-choice", function () {
@@ -62,8 +46,9 @@ function addChoice(element) {
     parent = $(element).parent(".container");
     question = parent.find(".label-q");
     block = question.first().clone();
-    block.children().attr("value", "choice");
-    block.children("p").html("Выбор " + ++question.length);
+    block.children().attr("value", "Выбор " + (question.length + 1));
+    block.children().attr('checked', false);
+    block.children("p").html("Выбор " + (question.length + 1));
     parent.find(".compactRadioGroup").append(block);
 }
 
@@ -74,27 +59,28 @@ function deleteChoice(element) {
 function reIndex() {
     var id = 1;
     $(".control-label").each(function (index) {
-        $(this).html(id++ + ". ");
+        $(this).html("Вопрос " + id++);
     });
 }
 
-function addQuestion() {
+function addQuestion($this) {
     var questionClone;
+
 
     $.ajax({
         url: "/test-constructor/add-question",
         method: "post",
         async: false,
+        data: { type: $($this).data('type')},
         success: (data) => {
             if (data) {
-                questionClone = data;
-                $("#questions-form").html(questionClone);
+                questionClone = $(data).find(".question-box").last();
             }
         },
     });
 
     questionClone.removeClass("show");
-    $("#questions-form").append(questionClone);
+    $("#questions-container").append(questionClone);
 
     questionHeight = questionClone.height();
     questionClone.height(0);

@@ -7,14 +7,12 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\TestrSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Tests';
+$this->title = 'Тесты';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="test-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -22,19 +20,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            // 'id',
-            ['attribute' => 'title', 'format' => 'raw', 'value' => function($data){
+            ['attribute' => 'title', 'format' => 'raw', 'value' => function ($data) {
                 return '<a href="' . 'test/' . $data->hash_link . '/settings' . '">' . $data->title . '</a>';
             }],
             'subject',
-            // 'created_by',
             'created_at',
-            //'test_body:ntext',
             'hash_link',
-            //'password',
-            //'is_published',
 
-            
         ],
     ]); ?>
 

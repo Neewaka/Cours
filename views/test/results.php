@@ -51,7 +51,8 @@ $this->title = 'Результаты';
 
         $answers = array_count_values(array_column((array)json_decode($data->result), 'correct'));
         $true = $answers[1] ?? 0;
-        $studentResults = $true . '/' . ($answers[1] + $answers[0]) . ' (' . $answers[1] / ($answers[1] + $answers[0]) * 100 . '%)';
+        
+        $studentResults = $true . '/' . ($answers[1] + $answers[0]) . ' (' . round($answers[1] / ($answers[1] + $answers[0]) * 100, 1) . '%)';
 
         return $studentResults;
       }],

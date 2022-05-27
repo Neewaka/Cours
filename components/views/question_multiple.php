@@ -19,18 +19,22 @@ use yii\helpers\VarDumper;
             <?= $form->field($item, "[$key]question")->label('Вопрос ' . ($key + 1), ['class' => 'control-label']) ?>
 
             <div class="container">
+
+
                 <?=
-                $form->field($item, "[$key]answer")->radioList(
+                $form->field($item, "[$key]answer")->checkboxList(
                     $item->choices,
                     ['class' => 'compactRadioGroup', 'item' => function ($index, $label, $name, $checked, $value) use ($item) {
                         if ($label == $item->answer) {
                             $checked = true;
                         }
-                        return '<div class="label-q" style="display: flex">' .
-                            Html::radio($name, $checked, ['value'  => $value, 'style' => 'margin-top: 5px']) .
-                            Html::tag('p', $label, ['class' => 'question-label ml-2 mb-0', 'contenteditable' => true]) .
-                            Html::tag('div', '-', ['class' => 'label-delete btn btn-danger']) . '</div>';
-                            Html::tag('div','',['class' => 'invalid-feedback']);
+                        
+                        return 
+                            Html::beginTag('div', ['class' => 'label-q']) .
+                            Html::checkbox($name, $checked, ['value'  => $value, 'style' => 'margin-top: 5px']) .
+                            Html::tag('p', $label, ['class' => 'question-label ml-2 mb-0 d-inline', 'contenteditable' => true]) .
+                            Html::tag('div', '-', ['class' => 'label-delete btn btn-danger d-inline float-right']) .
+                            Html::endTag('div');
                     }]
                 )->label(false) ?>
 

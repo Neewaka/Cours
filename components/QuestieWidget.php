@@ -25,11 +25,27 @@ class QuestieWidget extends Widget
         return $content;
     }
 
-    public function question($key, $item, $form)
+    public function question($key, $item, $form = null)
     {
+        $view = '';
+        switch ($item->type) {
+            case '1':
+                $view = 'question';
+                break;
+            case '2':
+                $view = 'question_multiple';
+                break;
+            case '3':
+                $view = 'question_trueFalse';
+                break;
+            case '4':
+                $view = 'question_fill';
+                break;
+        };
+
 
         return $this->render(
-            'question',
+            $view,
             [
                 'key' => $key,
                 'item' => $item,
@@ -40,19 +56,16 @@ class QuestieWidget extends Widget
 
     public function viewQuestions($items)
     {
+
         $this->questionsForm = ActiveForm::begin(['id' => 'questions-form']);
-        echo Html::beginTag('div', ['class' => 'questions']);
+        echo Html::beginTag('div', ['id' => 'questions-container']);
         foreach ($items as $key => $item) {
+            // var_dump($item);die;
             echo $this->question($key, $item, $this->questionsForm);
         }
         echo Html::endTag('div');
         echo $this->bottomForm();
         ActiveForm::end();
-    }
-
-    public function getForm()
-    {
-        return $this->questionsForm;
     }
 
     public function bottomForm()

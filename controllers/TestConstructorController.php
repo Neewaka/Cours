@@ -19,26 +19,20 @@ class TestConstructorController extends AppController
 
     public function actionAddQuestion()
     {
+        $post = Yii::$app->request->post();
 
-        // return TestConstructor::renderQuestion();
-
-        $item = QuestionForm::createExampleTest();
+        $item = QuestionForm::createExampleTest($post['type']);
 
         $session = Yii::$app->session;
         $questions = $session->get('questions');
-
-        $activeform = ActiveForm::begin(['id' => 'questions-form']);
-        $form = QuestieWidget::begin();
-        $quest = $form->question(4, $item, $activeform);
-        QuestieWidget::end();
-        ActiveForm::end();
-
-        // VarDumper::dump($questions,10,true);die;
+        
         $questions[] = $item;
+
         $session->set('questions', $questions);
 
-        return $this->renderPartial('/test\questions', [
-            'items' => $quest,
+        return $this->renderPartial('/test/questions', [
+            'items' => $questions,
+            'testType' => $item->type,
         ]);
     }
 

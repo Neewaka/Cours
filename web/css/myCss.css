@@ -1,7 +1,7 @@
 .label-q {
     margin: 2px;
-    padding: 5px;
     padding-left: 10px;
+    padding: 2px;
 }
 
 .label-q:hover {
@@ -21,11 +21,11 @@
 }
 
 .student-question {
-    display:flex;
+    display: flex;
     box-shadow: 0 0 10px 0px #bdbdbd;
     padding: 10px;
     margin-bottom: 10px;
-    background-color:ghostwhite;
+    background-color: ghostwhite;
     align-items: center;
 }
 
@@ -47,7 +47,6 @@
     border-bottom-right-radius: 0;
 }
 
-
 .list-group-horizontal > .list-group-item:first-child {
     border-bottom-left-radius: 0;
 }
@@ -65,5 +64,66 @@
 
 .question-form {
     box-shadow: 0 0 10px 0px #bdbdbd;
-    display:inline-block;
+    display: inline-block;
 }
+
+.questions-menu {
+    position: sticky;
+    top: 0;
+}
+
+.config-menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-direction: column;
+    height: auto;
+    margin-bottom:  5.9rem;
+    background: rgb(168 173 167 / 5%);
+    padding: 0.5rem;
+}
+
+.config-menu-group {
+    position: sticky;
+    top: 10%;
+    width: 100%;
+    
+}
+
+.config-menu-questions {
+    position: sticky;
+    padding-left: 15px;
+    padding-right: 15px;
+    bottom: 5%;
+    width: 100%;
+    background-color: #6c757d;
+}
+
+.invalid-feedback {
+    display: block;
+}
+
+.form-add-question {
+    background-color: initial;
+    color: #fff;
+    font-size: 14px;
+    padding: 5% 0;
+    vertical-align:middle;
+    box-shadow: #ccc 0 0 2px;
+}
+
+.form-add-question-label {
+    color: white;
+    text-align: center;
+    background-color: #545b62;
+    padding: 10px 0 10px 0;
+}
+
+.btn {
+    border-radius: 0px;
+}
+
+.mistake {
+    box-shadow: red 0 0 10px;
+}
+

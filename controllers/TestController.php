@@ -127,7 +127,7 @@ class TestController extends AppController
             $items = $session->get('questions');
         } else {
             if (empty($model->test_body)) {
-                $items = [QuestionForm::createExampleTest()];
+                $items = [QuestionForm::createExampleTest('1')];
             } else {
                 $items = QuestionForm::unpackTest($model->test_body);
             }
@@ -138,8 +138,9 @@ class TestController extends AppController
             $post = \Yii::$app->request->post();
             if ($post['QuestionForm']) {
                 if (Model::loadMultiple($items, Yii::$app->request->post())) {
-                    VarDumper::dump($items, 10, true);
-                    die;
+
+                    // VarDumper::dump($post['QuestionForm'], 10, true);die;
+
                     $model->test_body = json_encode($post['QuestionForm']);
                     $model->save();
                     Yii::$app->session->setFlash('success', 'Данные обновлены');
@@ -231,11 +232,25 @@ class TestController extends AppController
 
         if ($form = $this->request->post()['QuestionForm']) {
 
+            // var_dump($form);die;
+
             $result = [];
             foreach ($form as $key => $item) {
-                $result[] = ['given' => $key . $item['answer'], 'correct' => $items[$key]->answer == $item['answer'] ? 1 : 0];
+
+                // var_dump($item);
+                if(is_array($items[$key]->answer))
+                {
+                    // var_dump($item['answer']);die;
+                    $result[] = ['given' => $item['answer'], 'correct' => $items[$key]->answer == $item['answer'] ? 1 : 0];
+                } else {
+                    $result[] = ['given' => $item['answer'], 'correct' => $items[$key]->answer == $item['answer'] ? 1 : 0];
+                }
+                
+                
             }
 
+            // var_dump($result);die;
+            
             $testResult = new TestResult;
             $testResult->test_id = $test->id;
             $testResult->name = $name;

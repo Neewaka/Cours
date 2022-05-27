@@ -6,11 +6,20 @@ use yii\widgets\Pjax;
 use yii\widgets\ActiveForm;
 use app\models\TestConstructor;
 use app\components\QuestieWidget;
+use wbraganca\dynamicform\DynamicFormWidget;
 ?>
 
 <h2 class="page-name">Вопросы</h2>
 
-<?= TestConstructor::renderQuestionsForm($items) ?>
+<?
+
+$form = QuestieWidget::begin();
+$form->viewQuestions($items);
+QuestieWidget::end(); 
+
+?>
+
+
 
 <? $this->registerJsVar('questionsForm', json_encode($form), static::POS_END) ?>
 <? $this->registerJsFile(Yii::getAlias('@web') . '/js/questions.js', ['depends' => [\yii\web\YiiAsset::class], 'position' => static::POS_END]) ?>

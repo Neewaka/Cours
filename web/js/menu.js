@@ -7,6 +7,9 @@ function da(){
         if($name == $(this).html())
         {
             $(this).addClass('active');
+            if($(this).html() == 'Вопросы'){
+                $('.config-menu-questions').removeClass('d-none');
+            }
         }
     })
 }

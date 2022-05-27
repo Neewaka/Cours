@@ -28,42 +28,38 @@ AppAsset::register($this);
     <?php $this->beginBody() ?>
 
     <header>
-    <?php
-    NavBar::begin([
-        'brandLabel' => Yii::$app->name,
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => [
-            'class' => 'navbar navbar-expand-md navbar-dark bg-dark fixed-top',
-        ],
-    ]);
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav'],
-        'items' => [
-            ['label' => 'Главная', 'url' => ['/site/index']],
-            ['label' => 'О нас', 'url' => ['/site/about']],
-            Yii::$app->user->isGuest ? (
-                ['label' => 'Регистрация', 'url' => ['/site/registration']]
-            ) : (
-                ['label' => 'Мои тесты', 'url' => ['/test/']]
-            ),
-            Yii::$app->user->isGuest ? (
-                ['label' => 'Войти', 'url' => ['/site/login']]
-            ) : (
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
-                . Html::submitButton(
-                    'Выйти (' . Yii::$app->user->identity->login . ')',
-                    ['class' => 'btn btn-link logout']
+        <?php
+        NavBar::begin([
+            'brandLabel' => Yii::$app->name,
+            'brandUrl' => Yii::$app->homeUrl,
+            'options' => [
+                'class' => 'navbar navbar-expand-md navbar-dark bg-dark fixed-top',
+            ],
+        ]);
+        echo Nav::widget([
+            'options' => ['class' => 'navbar-nav'],
+            'items' => [
+                ['label' => 'Главная', 'url' => ['/site/index']],
+                ['label' => 'О нас', 'url' => ['/site/about']],
+                Yii::$app->user->isGuest ? (['label' => 'Регистрация', 'url' => ['/site/registration']]
+                ) : (['label' => 'Мои тесты', 'url' => ['/test/']]
+                ),
+                Yii::$app->user->isGuest ? (['label' => 'Войти', 'url' => ['/site/login']]
+                ) : ('<li>'
+                    . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
+                    . Html::submitButton(
+                        'Выйти (' . Yii::$app->user->identity->login . ')',
+                        ['class' => 'btn btn-link logout']
+                    )
+                    . Html::endForm()
+                    . '</li>'
                 )
-                . Html::endForm()
-                . '</li>'
-            )
-        ],
-    ]);
-    NavBar::end();
-    ?>
-    
-</header>
+            ],
+        ]);
+        NavBar::end();
+        ?>
+
+    </header>
 
     <main role="main" class="flex-shrink-0">
         <div class="container">
@@ -74,16 +70,32 @@ AppAsset::register($this);
 
             <h1>Конфигурация теста <b><?= $this->context->testInfo->title ?></b></h1>
 
-                <hr>
-                
+            <hr>
             <div class="row">
-                <div class="col-3">
-                    <div class="btn-group-vertical">
-                        <a href="settings" type="button" class="btn btn-secondary">Настройки</a>
-                        <a href="questions" type="button" class="btn btn-secondary">Вопросы</a>
-                        <a href="publish" type="button" class="btn btn-secondary">Публикация</a>
-                        <a href="results" type="button" class="btn btn-secondary">Результаты</a>
+                <div class="col-3 config-menu">
+                    <div class="btn-group-vertical config-menu-group">
+                        <a href="settings" type="button" class="btn btn-secondary config-menu-button">Настройки</a>
+                        <a href="questions" type="button" class="btn btn-secondary config-menu-button">Вопросы</a>
+                        <a href="publish" type="button" class="btn btn-secondary config-menu-button">Публикация</a>
+                        <a href="results" type="button" class="btn btn-secondary config-menu-button">Результаты</a>
                     </div>
+
+                    <div class="config-menu-questions d-none">
+                        <div class="row">
+                            <div class="col form-add-question-label">- Добавить вопрос -</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 btn btn-secondary form-add-question" data-type=1>Множественный выбор</div>
+                            <div class="col-6 btn btn-secondary form-add-question" data-type=2>Множественный ответ</div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col btn btn-secondary form-add-question" data-type=3>Правда/неправда</div>
+                            <div class="col btn btn-secondary form-add-question" data-type=4>Заполнить</div>
+                        </div>
+                    </div>
+
+
                 </div>
                 <div id='page-content' class="col-9">
                     <?= $content ?>
@@ -94,8 +106,7 @@ AppAsset::register($this);
 
     <footer class="footer mt-auto py-3 text-muted">
         <div class="container">
-            <p class="float-left">&copy; My Company <?= date('Y') ?></p>
-            <p class="float-right"><?= Yii::powered() ?></p>
+            <p class="float-left">&copy; Neewaka Co <?= date('Y') ?></p>
         </div>
     </footer>
 
