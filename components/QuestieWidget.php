@@ -43,6 +43,11 @@ class QuestieWidget extends Widget
                 break;
         };
 
+        if($view == '')
+        {
+            var_dump($item);die;
+        }
+
 
         return $this->render(
             $view,
@@ -56,11 +61,18 @@ class QuestieWidget extends Widget
 
     public function viewQuestions($items)
     {
-
         $this->questionsForm = ActiveForm::begin(['id' => 'questions-form']);
+
+        echo Html::beginTag('div', ['class' => 'test-time-form']);
+
+        echo Html::input('checkbox', 'QuestionForm[test-time-need]',null,['checked' => $items['time-need']]);
+        echo Html::label('Ограничивать время на прохождение теста?', null, ['class' => 'test-time-label']);
+
+        echo Html::input('time', 'QuestionForm[test-time]', $items['time'], ['step' => '2']);
+        echo Html::endTag('div');
+
         echo Html::beginTag('div', ['id' => 'questions-container']);
-        foreach ($items as $key => $item) {
-            // var_dump($item);die;
+        foreach ($items['items'] as $key => $item) {
             echo $this->question($key, $item, $this->questionsForm);
         }
         echo Html::endTag('div');

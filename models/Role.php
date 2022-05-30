@@ -56,6 +56,6 @@ class Role extends \yii\db\ActiveRecord
 
     public static function getIdByName($name)
     {
-        return self::find()->where(['name' => $name])->one()->id;
+        return self::find()->where(['title' => $name])->one()->id;
     }
 }

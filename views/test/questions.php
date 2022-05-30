@@ -6,7 +6,6 @@ use yii\widgets\Pjax;
 use yii\widgets\ActiveForm;
 use app\models\TestConstructor;
 use app\components\QuestieWidget;
-use wbraganca\dynamicform\DynamicFormWidget;
 ?>
 
 <h2 class="page-name">Вопросы</h2>

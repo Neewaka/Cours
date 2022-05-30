@@ -37,7 +37,7 @@ use yii\widgets\ActiveForm;
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
                 <?=
-                Html::a('Удалить', Url::to(['test/' . $model->hash_link . '/delete']), ['method' => 'post', 'class'=> 'btn btn-danger']) ?>
+                Html::a('Удалить', Url::to(['test/' . $model->hash_link . '/delete']), ['method' => 'post', 'class' => 'btn btn-danger']) ?>
 
             </div>
         </div>

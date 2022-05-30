@@ -74,6 +74,7 @@ AppAsset::register($this);
             <div class="row">
                 <div class="col-3 config-menu">
                     <div class="btn-group-vertical config-menu-group">
+                        <a href="general" type="button" class="btn btn-secondary config-menu-button">Стартовая страница</a>
                         <a href="settings" type="button" class="btn btn-secondary config-menu-button">Настройки</a>
                         <a href="questions" type="button" class="btn btn-secondary config-menu-button">Вопросы</a>
                         <a href="publish" type="button" class="btn btn-secondary config-menu-button">Публикация</a>

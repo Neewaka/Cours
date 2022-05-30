@@ -22,6 +22,7 @@ class AppAsset extends AssetBundle
     public $css = [
         'css/site.css',
         'css/myCss.css',
+        'css/jquery.countdown.css',
     ];
     public $js = [
     ];

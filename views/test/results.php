@@ -11,7 +11,9 @@ use yii\bootstrap4\Modal;
 
 $this->title = 'Результаты';
 ?>
-<div class="test-index">
+<div class="test-index mt-2">
+
+  <button class='btn btn-primary mb-2' id='download-json' data-test=<?= $model->id ?>>Скачать все результаты в формате JSON</button>
 
   <h2 class=""><?= Html::encode('Статистика процентов правильных ответов (%)') ?></h2>
 
@@ -51,7 +53,7 @@ $this->title = 'Результаты';
 
         $answers = array_count_values(array_column((array)json_decode($data->result), 'correct'));
         $true = $answers[1] ?? 0;
-        
+
         $studentResults = $true . '/' . ($answers[1] + $answers[0]) . ' (' . round($answers[1] / ($answers[1] + $answers[0]) * 100, 1) . '%)';
 
         return $studentResults;
@@ -62,7 +64,6 @@ $this->title = 'Результаты';
         'buttons' => [
           'view' => function ($url, $model, $key) {
             return Html::tag('button', 'Ответы', ['class' => 'btn btn-primary m-1 modal-answers', 'data-id' => $model->id]);
-            // return Html::a('Ответы', 'view?id=' . $model->id,[ 'class' => 'btn btn-primary m-1']);
           }
         ]
       ],
@@ -90,3 +91,4 @@ Modal::end();
 <? $this->registerJsVar('url_path', Url::to(['/test/student-result']), static::POS_BEGIN); ?>
 
 <? $this->registerJsFile(Yii::getAlias('@web') . '/js/menu.js', ['depends' => [\yii\web\YiiAsset::class], 'position' => static::POS_END]) ?>
+<? $this->registerJsFile(Yii::getAlias('@web') . '/js/results.js', ['depends' => [\yii\web\YiiAsset::class], 'position' => static::POS_END]) ?>

@@ -56,6 +56,7 @@ class RegistrationForm extends Model
 
             if($user->save())
             {
+                Yii::$app->user->login($user);
                 return $user;
             }
         }

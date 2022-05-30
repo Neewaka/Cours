@@ -124,22 +124,21 @@ class TestController extends AppController
         }
 
         if ($session->has('questions')) {
-            $items = $session->get('questions');
+            $items = ['items' => $session->get('questions')];
         } else {
             if (empty($model->test_body)) {
-                $items = [QuestionForm::createExampleTest('1')];
+                $items = ['items' => [QuestionForm::createExampleTest('1')]];
             } else {
                 $items = QuestionForm::unpackTest($model->test_body);
             }
-            $session->set('questions', $items);
+            $session->set('questions', $items['items']);
         }
 
         if (Yii::$app->request->isPost) {
             $post = \Yii::$app->request->post();
             if ($post['QuestionForm']) {
-                if (Model::loadMultiple($items, Yii::$app->request->post())) {
 
-                    // VarDumper::dump($post['QuestionForm'], 10, true);die;
+                if (Model::loadMultiple($items['items'], Yii::$app->request->post())) {
 
                     $model->test_body = json_encode($post['QuestionForm']);
                     $model->save();
@@ -164,7 +163,7 @@ class TestController extends AppController
         $this->testInfo = $model;
 
         if ($this->request->post()) {
-            $model->is_published = 1;
+            $model->is_published = $model->is_published ? 0 : 1;
             if ($model->save()) {
                 $this->refresh();
             }
@@ -189,6 +188,25 @@ class TestController extends AppController
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'procents' => $procents,
+            'model' => $model,
+        ]);
+    }
+
+    public function actionGeneral($hash_link)
+    {
+        $this->layout = 'test';
+        $model = $this->findModel($hash_link);
+        $this->testInfo = $model;
+
+        $searchModel = new TestResultSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+        $procents = $this->calculateProcents($dataProvider);
+
+        return $this->render('general', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'procents' => $procents,
+            'model' => $model,
         ]);
     }
 
@@ -200,14 +218,19 @@ class TestController extends AppController
         $model->test = $test;
 
         if ($model->load(\Yii::$app->request->post())) {
-            if ($model->validateAdminPassword()) {
 
-                $cookies = Yii::$app->response->cookies;
-                $cookies->add(new \yii\web\Cookie([
-                    'name' => 'test',
-                    'value' => $hash_link,
-                ]));
-                return $this->redirect(['settings', 'hash_link' => $test->hash_link]);
+            if (\Yii::$app->request->post('TestForm')['password'] != '') {
+                if ($model->validateAdminPassword()) {
+
+                    $cookies = Yii::$app->response->cookies;
+                    $cookies->add(new \yii\web\Cookie([
+                        'name' => 'test',
+                        'value' => $hash_link,
+                    ]));
+                    return $this->redirect(['settings', 'hash_link' => $test->hash_link]);
+                } else {
+                    return $this->refresh();
+                }
             } else {
                 return $this->redirect([
                     'student', 'hash_link' => $test->hash_link,
@@ -230,43 +253,39 @@ class TestController extends AppController
 
         $items = QuestionForm::unpackTest($test->test_body);
 
+        if ($this->request->isAjax) {
+            return json_encode(QuestionForm::getFormErrors($this->request->post()['QuestionForm']));
+        }
+
+
         if ($form = $this->request->post()['QuestionForm']) {
 
-            // var_dump($form);die;
+            $result = QuestionForm::getResults($form, $items['items']);
 
-            $result = [];
-            foreach ($form as $key => $item) {
-
-                // var_dump($item);
-                if(is_array($items[$key]->answer))
-                {
-                    // var_dump($item['answer']);die;
-                    $result[] = ['given' => $item['answer'], 'correct' => $items[$key]->answer == $item['answer'] ? 1 : 0];
-                } else {
-                    $result[] = ['given' => $item['answer'], 'correct' => $items[$key]->answer == $item['answer'] ? 1 : 0];
-                }
-                
-                
-            }
-
-            // var_dump($result);die;
-            
             $testResult = new TestResult;
             $testResult->test_id = $test->id;
             $testResult->name = $name;
             $testResult->email = $email ? $email : null;
             $testResult->result = json_encode($result);
 
-            if ($testResult->save()) {
+            if ($testResult->save(false)) {
+
                 return $this->redirect([
                     'student-result', 'hash_link' => $hash_link, 'testResult' => $testResult->id
                 ]);
             }
         }
 
+
+        if ($items['time-need'] == 'on') {
+            $timeArray = explode(':', $items['time']);
+            $time = $timeArray[0] * 3600 + $timeArray[1] * 60 + $timeArray[2];
+        }
+
         return $this->render('student', [
-            'items' => $items,
+            'items' => $items['items'],
             'test' => $test,
+            'time' => $time,
             'studentName' => $name,
         ]);
     }
@@ -280,7 +299,7 @@ class TestController extends AppController
         if ($ajax = Yii::$app->request->isAjax) {
             return $this->renderPartial('student_result', [
                 'test' => $test,
-                'items' => $items,
+                'items' => $items['items'],
                 'studentAnswers' => (array) json_decode($result->result),
                 'studentName' => $result->name,
                 'ajax' => $ajax,
@@ -289,7 +308,7 @@ class TestController extends AppController
 
         return $this->render('student_result', [
             'test' => $test,
-            'items' => $items,
+            'items' => $items['items'],
             'studentAnswers' => (array) json_decode($result->result),
             'studentName' => $result->name,
             'ajax' => $ajax,

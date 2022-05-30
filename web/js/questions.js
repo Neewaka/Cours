@@ -1,5 +1,6 @@
 reIndex();
 
+
 $("#questions-form").on("beforeValidate", function (event) {
     $(".compactRadioGroup").each(function (index) {
         choices = [];
@@ -66,7 +67,6 @@ function reIndex() {
 function addQuestion($this) {
     var questionClone;
 
-
     $.ajax({
         url: "/test-constructor/add-question",
         method: "post",
@@ -90,3 +90,4 @@ function addQuestion($this) {
 
     reIndex();
 }
+

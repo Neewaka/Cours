@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use Yii;
 
 /**
@@ -18,6 +19,10 @@ use Yii;
  */
 class TestResult extends \yii\db\ActiveRecord
 {
+
+    // public $errors = [];
+    // public $canPass = false;
+
     /**
      * {@inheritdoc}
      */
@@ -34,7 +39,7 @@ class TestResult extends \yii\db\ActiveRecord
         return [
             [['test_id', 'name', 'result'], 'required'],
             [['test_id'], 'integer'],
-            [['date'], 'safe'], 
+            [['date'], 'safe'],
             [['result'], 'string'],
             [['name', 'email'], 'string', 'max' => 255],
             [['test_id'], 'exist', 'skipOnError' => true, 'targetClass' => Test::className(), 'targetAttribute' => ['test_id' => 'id']],
@@ -50,7 +55,7 @@ class TestResult extends \yii\db\ActiveRecord
             'id' => 'ID',
             'test_id' => 'Test ID',
             'name' => 'Имя',
-            'date' => 'Дата прохождения', 
+            'date' => 'Дата прохождения',
             'email' => 'Email',
             'result' => 'Результат',
         ];
@@ -65,4 +70,5 @@ class TestResult extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Test::className(), ['id' => 'test_id']);
     }
+
 }

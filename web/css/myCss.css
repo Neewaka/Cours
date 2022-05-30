@@ -1,7 +1,16 @@
 .label-q {
     margin: 2px;
-    padding-left: 10px;
     padding: 2px;
+    padding-left: 10px;
+    border-bottom: 1px dotted #ccc;
+}
+
+.compactRadioGroup .label-q:last-child {
+    border: none;
+}
+
+.compactRadioGroup .label-q:only-child {
+    border: none;
 }
 
 .label-q:hover {
@@ -22,10 +31,10 @@
 
 .student-question {
     display: flex;
-    box-shadow: 0 0 10px 0px #bdbdbd;
+    box-shadow: 0 0 10px 0px #ccc;
     padding: 10px;
     margin-bottom: 10px;
-    background-color: ghostwhite;
+    background-color: white;
     align-items: center;
 }
 
@@ -125,5 +134,73 @@
 
 .mistake {
     box-shadow: red 0 0 10px;
+}
+
+.student-form {
+    border: 1px solid #ccc;
+    background-color: #f8f9fa;
+    margin-bottom: 15px;
+    padding: 20px;
+    padding-bottom: 0;
+}
+
+.modalBody {
+    display: flex;
+    flex-direction: column;
+    margin-left: 5%;
+}
+
+.test-time-form {
+    margin-left: 16px;
+}
+
+.test-time-label {
+    margin: 5px;
+}
+
+.start-page-number {
+    font-size: 45px;
+}
+
+button.start-page-row {
+    padding: 12px;
+}
+
+.start-page-row { 
+    border: 1px solid #ccc;
+    display: flex;
+    text-align: left;
+}
+
+.start-page-row:hover { 
+    background-color: #ccc;
+}
+
+
+.start-page-row:nth-child(2n) { 
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.start-page-row:nth-child(2n):hover { 
+    background-color: rgba(0, 0, 0, 0.35);
+}
+
+.start-page-label {
+    font-size: larger;
+    margin: 10px 0 10px 0;
+}
+
+.start-page-container {
+    margin-left: 25px;
+}
+
+.btn-block + .btn-block {
+    margin: 0;
+}
+
+.btn-block
+{
+    background-color: white;
+    margin: 0;
 }
 

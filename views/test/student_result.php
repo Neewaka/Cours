@@ -38,6 +38,7 @@ if ($ajax) {
                     <b>
                         <div class="control-label mb-3"></div>
                     </b>
+                    <div class="student-form">
                     <div class="student-question">
                         <div class="student-question__name"><?= $item->question ?></div>
                     </div>
@@ -60,6 +61,7 @@ if ($ajax) {
                         }
                         ?>
                     </div>
+                </div>
                 </div>
             </div>
 

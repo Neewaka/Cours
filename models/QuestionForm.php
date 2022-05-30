@@ -7,23 +7,24 @@ use yii\base\Model;
 
 class QuestionForm extends Model
 {
+
     public $question;
     public $choices;
     public $answer;
     public $type;
 
-    public function rules()
-    {
-        return [
-            [['answer'], 'required'],
-        ];
-    }
+    // public function rules()
+    // {
+    //     return [
+    //         [['answer'], 'required', 'message' => 'Необходимо ответить на вопрос!', 'except' => self::SCENARIO_NO_VALIDATION],
+    //     ];
+    // }
 
     public function attributeLabels()
     {
         return [
             'question' => 'question',
-            'answer' => 'answer',
+            'answer' => 'Ответ',
             'choices' => 'choices',
         ];
     }
@@ -89,11 +90,23 @@ class QuestionForm extends Model
     {
         $testArray = json_decode($testBody);
         $result = [];
+        $time = null;
+        $need = null;
 
-        
-
-        foreach ($testArray as $item) {
+        foreach ($testArray as $index => $item) {
             
+            if($index == 'test-time-need')
+            {
+                $need = $item;
+                continue;
+            }
+
+            if($index == 'test-time')
+            {
+                $time = $item;
+                continue;
+            }
+
             $test = new QuestionForm();
             $test->answer = $item->answer;
             $test->choices = explode(',', $item->choices);
@@ -102,6 +115,38 @@ class QuestionForm extends Model
             $result[] = $test;
         }
 
+
+        return ['time' => $time,'time-need' => $need,'items' => $result];
+    }
+
+    public static function getResults($form, $items)
+    {
+    
+
+        $result = [];
+            foreach ($form as $key => $item) {
+
+                if(is_array($items[$key]->answer))
+                {
+                    $result[] = ['given' => $item['answer'], 'correct' => $items[$key]->answer == $item['answer'] ? 1 : 0];
+                } else {
+                    $result[] = ['given' => $item['answer'], 'correct' => $items[$key]->answer == $item['answer'] ? 1 : 0];
+                }       
+            }  
+
         return $result;
+    }
+
+    public static function getFormErrors($form)
+    {
+        $errors = [];
+        foreach($form as $index => $item){
+            if($item['answer'] == '')
+            {
+                $errors[] = $index;
+            }
+        }
+
+        return $errors;
     }
 }

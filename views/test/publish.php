@@ -4,7 +4,9 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
+
 ?>
+
 
 <h2 class="page-name">Публикация</h2>
 
@@ -30,6 +32,13 @@ use yii\widgets\ActiveForm;
                 <p class="lead"><?= Html::a($url, $url) ?></p>
         </div>
     </div>
+
+    <?php $form = ActiveForm::begin(['id' => 'test-form']); ?>
+
+    <div class="form-group text-center">
+        <?= Html::submitButton('Снова сделать мой тест приватным', ['class' => 'btn btn-danger view-submit btn-lg']) ?>
+    </div>
+    <?php ActiveForm::end(); ?>
 
 <? endif; ?>
 
